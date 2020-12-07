@@ -33,6 +33,3 @@ jobs:
         - make fast-test
         - make slow-test
       if: (type = push) AND (type = pull_request)
-branches:
-  only:
-    - master
