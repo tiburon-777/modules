@@ -1,0 +1,21 @@
+run:
+  tests: false
+
+linters:
+  disable-all: false
+  enable-all: true
+  disable:
+    - gochecknoglobals
+    - gochecknoinits
+    - godox
+    - goerr113
+    - gomnd
+    - lll
+    - nakedret
+    - testpackage
+    - wsl
+    - nlreturn
+    - whitespace
+    - bodyclose
+    - wrapcheck
+    - exhaustivestruct
