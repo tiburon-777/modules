@@ -9,7 +9,7 @@ import (
 	amitralog "github.com/amitrai48/logger"
 )
 
-type LoggerInterface interface {
+type Interface interface {
 	Debugf(format string, args ...interface{})
 	Infof(format string, args ...interface{})
 	Warnf(format string, args ...interface{})
@@ -29,7 +29,7 @@ type Config struct {
 
 var validLevel = map[string]bool{"debug": true, "info": true, "warn": true, "error": true, "fatal": true}
 
-func New(conf Config) (LoggerInterface, error) {
+func New(conf Config) (Interface, error) {
 	if conf.File == "" || !validLevel[strings.ToLower(conf.Level)] {
 		return nil, errors.New("invalid logger config")
 	}

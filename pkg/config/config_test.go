@@ -8,7 +8,6 @@ import (
 	"testing"
 )
 
-
 func TestNewConfig(t *testing.T) {
 
 	badfile, err := ioutil.TempFile("", "conf.")

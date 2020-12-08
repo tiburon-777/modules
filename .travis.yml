@@ -30,6 +30,5 @@ jobs:
       install: go mod download
       script:
         - make lint
-        - make fast-test
-        - make slow-test
+        - make test
       if: (type = push) AND (type = pull_request)
