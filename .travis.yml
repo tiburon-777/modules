@@ -31,4 +31,4 @@ jobs:
       script:
         - make lint
         - make test
-      if: (type = push) AND (type = pull_request)
+      if: (type = push) OR (type = pull_request)
