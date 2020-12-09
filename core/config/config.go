@@ -43,13 +43,17 @@ func (s Interface) Combine(c Config) error {
 	if c.EnvPrefix != "" {
 		fmt.Printf("try to apply config from environment...\n")
 		if err := s.SetFromEnv(c.EnvPrefix); err != nil {
-			return fmt.Errorf("can't apply envvars to config :%w", err)
+			return fmt.Errorf("can't apply envvars to config:%w", err)
 		}
 	}
 	if c.DSN != "" {
 		fmt.Printf("try to apply config from DSN %s...\n", c.DSN)
-		if err := s.SetFromDB(c.DSN); err != nil {
-			return fmt.Errorf("can't apply db lines to config :%w", err)
+		db, dbname, err := DialDSN(c.DSN)
+		if err != nil {
+			return fmt.Errorf("can't dial DB:%w", err)
+		}
+		if err := s.SetFromDB(db, dbname); err != nil {
+			return fmt.Errorf("can't apply db lines to config:%w", err)
 		}
 	}
 	return nil
@@ -78,12 +82,11 @@ func (s Interface) SetFromEnv(prefix string) error {
 	return getEnvVar(reflect.ValueOf(s.str), reflect.TypeOf(s.str), -1, prefix)
 }
 
-// Method adds and replace config fields from db.
-func (s Interface) SetFromDB(dsn string) error {
+func DialDSN(dsn string) (db *sql.DB, dbname string, err error) {
 	m := strings.FieldsFunc(dsn, func(r rune) bool { return r == ':' || r == '@' || r == '/' })
 	dbName := m[len(m)-1]
 	if dbName == "" {
-		return fmt.Errorf("DSN not contains database name: %s", dsn)
+		return nil, "", fmt.Errorf("DSN not contains database name: %s", dsn)
 	}
 
 	var driver string
@@ -96,15 +99,19 @@ func (s Interface) SetFromDB(dsn string) error {
 		driver = "postgresql"
 	}
 
-	db, err := sql.Open(driver, dsn)
+	db, err = sql.Open(driver, dsn)
 	if err != nil {
-		return fmt.Errorf("can't connect to DB: %w", err)
+		return nil, "", fmt.Errorf("can't connect to DB: %w", err)
 	}
-	defer db.Close()
+	return db, dbName, nil
+}
 
+// Method adds and replace config fields from db.
+func (s Interface) SetFromDB(db *sql.DB, dbname string) error {
+	defer db.Close()
 	res := make(map[string]string)
 	var key, val string
-	results, err := db.Query(`SELECT key, value FROM $1`, dbName)
+	results, err := db.Query("SELECT key, value FROM ?", dbname)
 	if err != nil || results.Err() != nil {
 		return fmt.Errorf("can't get key-value pairs from DB: %w", err)
 	}
