@@ -127,7 +127,7 @@ func (s Interface) SetFromDB(db *sql.DB, dbname string) error {
 		if err != nil {
 			return fmt.Errorf("can't parse key-value into vars: %w", err)
 		}
-		res[key] = val
+		res[strings.ToLower(key)] = val
 	}
 	if err = parseToStruct(reflect.ValueOf(s.str), reflect.TypeOf(s.str), -1, "", res); err != nil {
 		return fmt.Errorf("can't parse into struct: %w", err)

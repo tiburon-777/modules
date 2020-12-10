@@ -45,7 +45,7 @@ func parseToStruct(v reflect.Value, t reflect.Type, counter int, prefix string, 
 		f = t.Field(counter)
 	}
 	v = reflect.Indirect(v)
-	fName := strings.ToUpper(f.Name)
+	fName := strings.ToLower(f.Name)
 	if prefix != "" {
 		prefix = strings.TrimLeft(prefix, ".")
 	}

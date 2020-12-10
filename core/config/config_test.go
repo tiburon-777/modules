@@ -235,12 +235,12 @@ func TestSetFromDBPositive(t *testing.T) {
 		defer db.Close()
 
 		rows := sqlmock.NewRows([]string{"key", "value"})
-		rows.AddRow("SECTION1.VARINT1", "11")
-		rows.AddRow("SECTION1.VARSTRING1", "first string")
-		rows.AddRow("SECTION1.VARBOOL1", "true")
-		rows.AddRow("SECTION2.VARINT2", "22")
-		rows.AddRow("SECTION2.VARSTRING2", "second string")
-		rows.AddRow("SECTION2.VARBOOL2", "true")
+		rows.AddRow("section1.varint1", "11")
+		rows.AddRow("section1.varstring1", "first string")
+		rows.AddRow("section1.varbool1", "true")
+		rows.AddRow("section2.varint2", "22")
+		rows.AddRow("section2.varstring2", "second string")
+		rows.AddRow("section2.varbool2", "true")
 
 		mock.ExpectQuery("SELECT config.key, config.value FROM config").WillReturnRows(rows)
 		var c TestConf
@@ -261,9 +261,9 @@ func TestSetFromDBPositive(t *testing.T) {
 		defer db.Close()
 
 		rows := sqlmock.NewRows([]string{"key", "value"})
-		rows.AddRow("SECTION2.VARINT2", "22")
-		rows.AddRow("SECTION2.VARSTRING2", "second string")
-		rows.AddRow("SECTION2.VARBOOL2", "true")
+		rows.AddRow("section2.VARINT2", "22")
+		rows.AddRow("section2.VARSTRING2", "second string")
+		rows.AddRow("section2.VARBOOL2", "true")
 
 		mock.ExpectQuery("SELECT config.key, config.value FROM config").WillReturnRows(rows)
 		var c TestConf
