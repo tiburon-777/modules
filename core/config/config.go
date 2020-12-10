@@ -91,12 +91,14 @@ func DialDSN(dsn string) (db *sql.DB, dbname string, err error) {
 
 	var driver string
 	switch {
-	case strings.HasPrefix(dsn, "postgres://") || strings.HasPrefix(dsn, "postgresql://") || strings.HasPrefix(dsn, "psql://"):
-		driver = "postgresql"
+	case strings.HasPrefix(dsn, "postgres://"):
+		driver = "postgres"
+		dsn = strings.TrimLeft(dsn, "postgres://")
 	case strings.HasPrefix(dsn, "mysql://"):
 		driver = "mysql"
+		dsn = strings.TrimLeft(dsn, "mysql://")
 	default:
-		driver = "postgresql"
+		return nil, "", fmt.Errorf("can't use unknown SQL dialect")
 	}
 
 	db, err = sql.Open(driver, dsn)
