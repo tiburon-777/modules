@@ -113,7 +113,11 @@ func (s Interface) SetFromDB(db *sql.DB, dbname string) error {
 	defer db.Close()
 	res := make(map[string]string)
 	var key, val string
-	results, err := db.Query("SELECT key, value FROM ?", dbname)
+
+	//TODO: Перенести это в параметры.
+	table := "config"
+	q := "SELECT " + table + ".key, " + table + ".value FROM " + table
+	results, err := db.Query(q)
 	if err != nil || results.Err() != nil {
 		return fmt.Errorf("can't get key-value pairs from DB: %w", err)
 	}

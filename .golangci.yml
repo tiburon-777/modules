@@ -20,3 +20,4 @@ linters:
     - wrapcheck
     - exhaustivestruct
     - staticcheck
+    - gofumpt

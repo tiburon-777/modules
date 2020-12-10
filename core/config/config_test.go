@@ -242,7 +242,7 @@ func TestSetFromDBPositive(t *testing.T) {
 		rows.AddRow("SECTION2.VARSTRING2", "second string")
 		rows.AddRow("SECTION2.VARBOOL2", "true")
 
-		mock.ExpectQuery("SELECT key, value FROM").WithArgs("config").WillReturnRows(rows)
+		mock.ExpectQuery("SELECT config.key, config.value FROM config").WillReturnRows(rows)
 		var c TestConf
 		i := New(&c)
 		err := i.SetFromDB(db, "config")
@@ -265,7 +265,7 @@ func TestSetFromDBPositive(t *testing.T) {
 		rows.AddRow("SECTION2.VARSTRING2", "second string")
 		rows.AddRow("SECTION2.VARBOOL2", "true")
 
-		mock.ExpectQuery("SELECT key, value FROM").WithArgs("config").WillReturnRows(rows)
+		mock.ExpectQuery("SELECT config.key, config.value FROM config").WillReturnRows(rows)
 		var c TestConf
 		i := New(&c)
 		err := i.SetFromDB(db, "config")
@@ -285,7 +285,7 @@ func TestSetFromDBPositive(t *testing.T) {
 
 		rows := sqlmock.NewRows([]string{"key", "value"})
 
-		mock.ExpectQuery("SELECT key, value FROM").WithArgs("config").WillReturnRows(rows)
+		mock.ExpectQuery("SELECT config.key, config.value FROM config").WillReturnRows(rows)
 		var c TestConf
 		i := New(&c)
 		err := i.SetFromDB(db, "config")
